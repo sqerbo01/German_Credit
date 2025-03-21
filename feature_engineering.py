@@ -1,3 +1,5 @@
+import pandas as pd
+
 
 # still in progress
 
@@ -11,11 +13,14 @@ def engineer_features(df):
     
     # --- 1. Encode Ordinal Features First (Critical for Derived Features) ---
     # Credit History (Risk Level: 0=worst, 2=best)
+
     credit_history_map = {
-        'prior_payments_delayed': 0,
-        'existing_credits_paid_duly': 1,
-        'credits_paid_to_date': 2
-    }
+    'prior_payments_delayed': 0,      # Highest risk (history of late payments)
+    'outstanding_credit': 1,          # Moderate risk (current unpaid debts)
+    'no_credits': 2,                  # Neutral/unknown risk (no credit history)
+    'credits_paid_to_date': 3,        # Low risk (current credits managed well)
+    'all_credits_paid_back': 4        # Lowest risk (proven repayment ability)
+}
     df['CreditHistoryRisk'] = df['CreditHistory'].map(credit_history_map)
     
     # ExistingSavings (Convert categories to numeric midpoints)
@@ -23,7 +28,8 @@ def engineer_features(df):
         'less_100': 50,
         '100_to_500': 300,
         '500_to_1000': 750,
-        'greater_1000': 1500  # Assumed upper bound
+        'greater_1000': 1500,   # Assumed upper bound
+        'unknown': pd.NA
     }
     df['ExistingSavingsNumeric'] = df['ExistingSavings'].map(savings_map)
     
