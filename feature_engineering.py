@@ -59,5 +59,21 @@ def engineer_features(df):
     
     # --- 3. Binary Flags ---
     df['prior_default_flag'] = (df['CreditHistory'] == 'prior_payments_delayed').astype(int)
-    
+
+    # Loan amount per age
+    df['loan_amount_per_age'] = df['LoanAmount'] / (df['Age'] + 1e-5)
+
+    # Residence duration per age
+    df['residence_duration_per_age'] = df['CurrentResidenceDuration'] / (df['Age'] + 1e-5)
+
+    # Employment years per age
+    df['employment_years_per_age'] = df['EmploymentDurationYears'] / (df['Age'] + 1e-5)
+
+    # Flag for large loans (threshold can be adjusted)
+    large_loan_threshold = 3000
+    df['is_large_loan'] = (df['LoanAmount'] > large_loan_threshold).astype(int)
+
+    # Loan amount multiplied by credit history risk
+    df['loan_credit_risk_interaction'] = df['LoanAmount'] * (3 - df['CreditHistoryRisk'])
+
     return df

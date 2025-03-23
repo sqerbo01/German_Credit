@@ -13,11 +13,29 @@ def train_logistic_regression(X_train, y_train):
     return model
 
 
-def train_xgboost(X_train, y_train):
+'''def train_xgboost(X_train, y_train):
     """
     Trains an XGBoost classifier and returns it.
     """
     model = XGBClassifier(use_label_encoder=False, eval_metric='logloss')
+    model.fit(X_train, y_train)
+    return model'''
+
+
+def train_xgboost(X_train, y_train):
+    """
+    Trains an XGBoost classifier with tuned hyperparameters and returns it.
+    """
+    model = XGBClassifier(
+        max_depth=4,
+        learning_rate=0.019545073364830568,
+        n_estimators=111,
+        subsample=0.943450282452676,
+        colsample_bytree=0.7354447358381201,
+        gamma=2.04067902399041,
+        use_label_encoder=False,
+        eval_metric='logloss'
+    )
     model.fit(X_train, y_train)
     return model
 
