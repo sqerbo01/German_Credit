@@ -35,11 +35,13 @@ def engineer_features(df):
     
     # EmploymentDuration (Convert to approximate years)
     employment_duration_map = {
+        'unemployed': 0.0,
         'less_1': 0.5,
         '1_to_4': 2.5,
         '4_to_7': 5.5,
         'greater_7': 8.0
     }
+
     df['EmploymentDurationYears'] = df['EmploymentDuration'].map(employment_duration_map)
     
     # --- 2. Create New Features ---
@@ -48,7 +50,7 @@ def engineer_features(df):
     df['debt_to_savings'] = df['LoanAmount'] / (df['ExistingSavingsNumeric'] + 1e-5)
     
     # Risk Interaction Terms
-    df['loan_amount_x_credit_risk'] = df['LoanAmount'] * (3 - df['CreditHistoryRisk'])  # Higher = riskier
+    df['loan_amount_x_credit_risk'] = df['LoanAmount'] * (5 - df['CreditHistoryRisk'])  # Higher = riskier
     
     # Stability Metrics
     df['employment_stability'] = df['EmploymentDurationYears'] / (df['LoanDuration'] / 12 + 1e-5)  # Years employement per year loan duration
