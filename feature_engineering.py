@@ -116,7 +116,10 @@ def engineer_features(df):
     large_loan_threshold = 3000
     df['is_large_loan'] = (df['LoanAmount'] > large_loan_threshold).astype(int)
 
-    df['Risk_Numeric'] = df['Risk'].map({'Risk': 1, 'No Risk': 0})
+    df['LoanTier'] = pd.cut(df['LoanAmount'], bins=[0, 3000, 6000, np.inf], labels=['small', 'medium', 'large'])
+
+    if 'Risk' in df.columns:
+        df['Risk_Numeric'] = df['Risk'].map({'Risk': 1, 'No Risk': 0})
 
 
     return df
@@ -195,3 +198,5 @@ def feature_selection(df):
     # Select and return the final features
     final_columns = [col for col in selected_columns if col in df.columns]
     return df[final_columns]
+
+
