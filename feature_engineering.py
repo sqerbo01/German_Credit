@@ -200,3 +200,21 @@ def feature_selection(df):
     return df[final_columns]
 
 
+def preprocessing(df, is_test=False):
+    """Handles both training and test sets"""
+    cat_cols = ['LoanPurpose', 'Sex', 'OthersOnLoan', 'OwnsProperty', 'Telephone', 'ForeignWorker']
+    df = pd.get_dummies(df, columns=cat_cols, drop_first=True)
+
+    # Handle Missing Values
+    df['ExistingSavingsNumeric'] = df['ExistingSavingsNumeric'].fillna(-1)
+    df['debt_to_savings'] = df['debt_to_savings'].fillna(-1)
+
+    # Define Features
+    FEATURES = [col for col in df.columns if col not in ['Risk_Numeric', 'LoanTier']]
+    
+    if is_test:
+        # Test set won't have target
+        return df[FEATURES], df['LoanAmount'] # X, amount
+    else:
+        # Training set has target
+        return df[FEATURES], df['Risk_Numeric'], df['LoanAmount'] # X, y, amount

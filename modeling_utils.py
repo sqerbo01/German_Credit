@@ -183,3 +183,20 @@ def crossval_custom_score_general(df, FEATURES, TARGET, model, threshold=0.5, k=
     mean_score = np.mean(scores)
     print(f"\n📊 Mean Custom Competition Score (across {k} folds): {mean_score:.4f}")
     return scores, mean_score
+
+from sklearn.model_selection import train_test_split
+
+def create_splits(X, y, loan_amounts, test_size=0.1, random_state=1):
+    """
+    Creates stratified train/holdout splits preserving all relationships
+    
+    Returns:
+        X_train, X_val, y_train, y_val, amt_train, amt_val
+    """
+    X_train, X_val, y_train, y_val, amt_train, amt_val = train_test_split(
+        X, y, loan_amounts,
+        test_size=test_size,
+        stratify=y,  # Preserves class balance
+        random_state=random_state
+    )
+    return X_train, X_val, y_train, y_val, amt_train, amt_val
